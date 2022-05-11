@@ -7,7 +7,8 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
+import { RegisterParamsModel, RegisterResultModel } from '/@/api/sys/model/register';
+import { doLogout, getUserInfo, loginApi, registerApi } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -151,6 +152,21 @@ export const useUserStore = defineStore({
       this.setSessionTimeout(false);
       this.setUserInfo(null);
       goLogin && router.push(PageEnum.BASE_LOGIN);
+    },
+    /**
+     * @description: Register
+     */
+    async register(
+      params: RegisterParamsModel & { mode?: ErrorMessageMode },
+    ): Promise<RegisterResultModel | null> {
+      try {
+        const { mode = 'modal', ...registerParams } = params;
+        const data = await registerApi(registerParams, mode);
+        console.log(data);
+        return data;
+      } catch (error) {
+        return Promise.reject(error);
+      }
     },
 
     /**

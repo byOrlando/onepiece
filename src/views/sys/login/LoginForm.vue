@@ -96,7 +96,7 @@
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
-
+  import { WebStorage } from '/@/utils/cache/index';
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -116,16 +116,20 @@
 
   const formRef = ref();
   const loading = ref(false);
-  const rememberMe = ref(false);
+  // 获取记住我的状态
+  let rememberMeCache = WebStorage.get('rememberMe', false);
+  // 获取用户名
+  let accountCache = WebStorage.get('userName', '');
+  const rememberMe = ref(rememberMeCache);
 
   const formData = reactive({
-    account: 'vben',
-    password: '123456',
+    account: accountCache,
+    password: '',
   });
 
   const { validForm } = useFormValid(formRef);
 
-  //onKeyStroke('Enter', handleLogin);
+  // onKeyStroke('Enter', handleLogin);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
@@ -154,6 +158,13 @@
       });
     } finally {
       loading.value = false;
+    }
+    if (rememberMe.value) {
+      WebStorage.set('userName', formData.account);
+      WebStorage.set('rememberMe', true);
+    } else {
+      WebStorage.remove('userName');
+      WebStorage.remove('rememberMe');
     }
   }
 </script>

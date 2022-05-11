@@ -67,7 +67,7 @@ export default {
 
     signInTitle: '开箱即用的中后台管理系统',
     signInDesc: '输入您的个人详细信息开始使用！',
-    policy: '我同意xxx隐私政策',
+    policy: '我同意[ONE-PIECE]隐私政策',
     scanSign: `扫码后点击"确认"，即可完成登录`,
 
     loginButton: '登录',
@@ -83,8 +83,9 @@ export default {
     // placeholder
     accountPlaceholder: '请输入账号',
     passwordPlaceholder: '请输入密码',
+    passwordPlaceholder2: '必须包含字母、数字、特殊字符长度再9-20位之间',
     smsPlaceholder: '请输入验证码',
-    mobilePlaceholder: '请输入手机号码',
+    mobilePlaceholder: '请输入正确的手机号码',
     policyPlaceholder: '勾选后才能注册',
     diffPwd: '两次输入密码不一致',
 

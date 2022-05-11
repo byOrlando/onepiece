@@ -72,6 +72,7 @@
   import { StrengthMeter } from '/@/components/StrengthMeter';
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { useUserStore } from '/@/store/modules/user';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
 
   const FormItem = Form.Item;
@@ -97,8 +98,16 @@
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
 
   async function handleRegister() {
-    const data = await validForm();
-    if (!data) return;
-    console.log(data);
+    try {
+      await validForm();
+      const data = await validForm();
+      // if (!data) return;
+      const userStore = useUserStore();
+      const result = await userStore.register(data);
+
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   }
 </script>

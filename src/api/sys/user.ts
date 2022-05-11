@@ -1,10 +1,11 @@
 import { defHttp } from '/@/utils/http/axios';
 import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
-
+import { RegisterParamsModel, RegisterResultModel } from './model/register';
 import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
   Login = '/login',
+  Register = '/register',
   Logout = '/logout',
   GetUserInfo = '/getUserInfo',
   GetPermCode = '/getPermCode',
@@ -38,4 +39,16 @@ export function getPermCode() {
 
 export function doLogout() {
   return defHttp.get({ url: Api.Logout });
+}
+
+export function registerApi(params: RegisterParamsModel, mode: ErrorMessageMode = 'none') {
+  return defHttp.post<RegisterResultModel>(
+    {
+      url: Api.Register,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
 }

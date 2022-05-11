@@ -20,6 +20,14 @@ export interface LoginResultModel {
 }
 
 /**
+ * @description: Login interface return value
+ */
+export interface LoginResultModel {
+  token?: string;
+  msg?: string;
+}
+
+/**
  * @description: Get user information return value
  */
 export interface GetUserInfoModel {

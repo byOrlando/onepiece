@@ -1,6 +1,7 @@
 import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
 import type { RuleObject } from 'ant-design-vue/lib/form/interface';
 import { ref, computed, unref, Ref } from 'vue';
+import { func } from 'vue-types';
 import { useI18n } from '/@/hooks/web/useI18n';
 
 export enum LoginStateEnum {
@@ -43,8 +44,8 @@ export function useFormRules(formData?: Recordable) {
 
   const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
   const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
-  const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
-  const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
+  const getSmsFormRule = computed(() => createRuleMsm(t('sys.login.smsPlaceholder')));
+  const getMobileFormRule = computed(() => createRuleaMobile(t('sys.login.mobilePlaceholder')));
 
   const validatePolicy = async (_: RuleObject, value: boolean) => {
     return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
@@ -76,8 +77,20 @@ export function useFormRules(formData?: Recordable) {
       // register form rules
       case LoginStateEnum.REGISTER:
         return {
-          account: accountFormRule,
-          password: passwordFormRule,
+          account: createRuleAccount(t('sys.login.accountPlaceholder')),
+          password: [
+            {
+              required: true,
+              message: t('sys.login.passwordPlaceholder'),
+              trigger: 'change',
+            },
+            {
+              //必须包含大小写字母、数字、特殊字符长度再9-16位之间
+              pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{9,20}$/,
+              message: t('sys.login.passwordPlaceholder2'),
+              trigger: 'change',
+            },
+          ],
           confirmPassword: [
             { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
           ],
@@ -112,6 +125,61 @@ function createRule(message: string) {
     {
       required: true,
       message,
+      trigger: 'change',
+    },
+  ];
+}
+
+function createRuleAccount(message: string) {
+  return [
+    {
+      required: true,
+      message,
+      trigger: 'change',
+    },
+    {
+      pattern: /^[a-zA-Z]{1}/,
+      message: '必须以字母开头',
+      trrigger: 'change',
+    },
+    {
+      pattern: /^[a-z0-9_]{5,10}$/,
+      message: '请输入5-10位字母、数字或下划线',
+      trigger: 'change',
+    },
+    {
+      // 必须数字或字母结尾
+      pattern: /^(.*?)[a-z0-9]{1}$/,
+      message: '必须以字母或数字结尾',
+      trigger: 'change',
+    },
+  ];
+}
+function createRuleaMobile(message: string) {
+  return [
+    {
+      required: true,
+      message,
+      trigger: 'change',
+    },
+    {
+      pattern: /^1[3456789]\d{9}$/,
+      message: '请输入正确的手机号码',
+      trigger: 'change',
+    },
+  ];
+}
+
+function createRuleMsm(message: string) {
+  return [
+    {
+      required: true,
+      message,
+      trigger: 'change',
+    },
+    {
+      pattern: /^\d{6}$/,
+      message: '请输入6位数字',
       trigger: 'change',
     },
   ];
