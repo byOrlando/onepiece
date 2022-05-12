@@ -30,6 +30,7 @@
         <StrengthMeter
           size="large"
           v-model:value="formData.password"
+          autocomplete
           :placeholder="t('sys.login.password')"
         />
       </FormItem>
@@ -37,6 +38,7 @@
         <InputPassword
           size="large"
           visibilityToggle
+          autocomplete
           v-model:value="formData.confirmPassword"
           :placeholder="t('sys.login.confirmPassword')"
         />
@@ -74,12 +76,13 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useUserStore } from '/@/store/modules/user';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
   const { handleBackLogin, getLoginState } = useLoginState();
-
+  const { notification } = useMessage();
   const formRef = ref();
   const loading = ref(false);
 
@@ -101,13 +104,17 @@
     try {
       await validForm();
       const data = await validForm();
-      // if (!data) return;
+      if (!data) return;
       const userStore = useUserStore();
       const result = await userStore.register(data);
-
       console.log(result);
+      setTimeout(() => {
+        document.location.reload();
+      }, 500);
     } catch (error) {
-      console.log(error);
+      notification.error({
+        message: (error as unknown as Error).message || '请检查数据是否正确',
+      });
     }
   }
 </script>

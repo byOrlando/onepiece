@@ -126,12 +126,12 @@ export const useUserStore = defineStore({
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
       const userInfo = await getUserInfo();
-      const { roles = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
+      const { role = [] } = userInfo;
+      if (isArray(role)) {
+        const roleList = role.map((item) => item.value) as RoleEnum[];
         this.setRoleList(roleList);
       } else {
-        userInfo.roles = [];
+        userInfo.role = [];
         this.setRoleList([]);
       }
       this.setUserInfo(userInfo);
@@ -160,9 +160,10 @@ export const useUserStore = defineStore({
       params: RegisterParamsModel & { mode?: ErrorMessageMode },
     ): Promise<RegisterResultModel | null> {
       try {
-        const { mode = 'modal', ...registerParams } = params;
+        const { notification } = useMessage();
+        const { mode = 'none', ...registerParams } = params;
         const data = await registerApi(registerParams, mode);
-        console.log(data);
+        notification.success({ message: data?.msg || 'success' });
         return data;
       } catch (error) {
         return Promise.reject(error);

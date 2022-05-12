@@ -20,6 +20,7 @@
       <InputPassword
         size="large"
         visibilityToggle
+        autoComplete
         v-model:value="formData.password"
         :placeholder="t('sys.login.password')"
       />
@@ -107,7 +108,7 @@
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
-  const { notification, createErrorModal } = useMessage();
+  const { notification } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
 
@@ -117,9 +118,9 @@
   const formRef = ref();
   const loading = ref(false);
   // 获取记住我的状态
-  let rememberMeCache = WebStorage.get('rememberMe', false);
+  let rememberMeCache = WebStorage.get('remember__Me', false);
   // 获取用户名
-  let accountCache = WebStorage.get('userName', '');
+  let accountCache = WebStorage.get('user__Name', '');
   const rememberMe = ref(rememberMeCache);
 
   const formData = reactive({
@@ -134,9 +135,17 @@
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
   async function handleLogin() {
-    const data = await validForm();
-    if (!data) return;
+    if (rememberMe.value && formData.account) {
+      WebStorage.set('user__Name', formData.account);
+      WebStorage.set('remember__Me', true);
+    } else {
+      WebStorage.remove('user__Name');
+      WebStorage.remove('remember__Me');
+    }
+
     try {
+      const data = await validForm();
+      if (!data) return;
       loading.value = true;
       const userInfo = await userStore.login({
         password: data.password,
@@ -146,25 +155,16 @@
       if (userInfo) {
         notification.success({
           message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.nickname}`,
           duration: 3,
         });
       }
     } catch (error) {
-      createErrorModal({
-        title: t('sys.api.errorTip'),
-        content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-        getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+      notification.error({
+        message: (error as unknown as Error).message || '账号或密码错误',
       });
     } finally {
       loading.value = false;
-    }
-    if (rememberMe.value) {
-      WebStorage.set('userName', formData.account);
-      WebStorage.set('rememberMe', true);
-    } else {
-      WebStorage.remove('userName');
-      WebStorage.remove('rememberMe');
     }
   }
 </script>
