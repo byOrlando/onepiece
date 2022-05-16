@@ -34,9 +34,10 @@ export const useOtherStore = defineStore({
       const res = await getWeather();
       this.setWeather(res);
     },
-    async HttpIpAddress() {
-      const res = await getIpAddress();
-      this.setIpAddress(res);
+    HttpIpAddress() {
+      getIpAddress().then((res) => {
+        this.setIpAddress(res);
+      });
     },
   },
 });

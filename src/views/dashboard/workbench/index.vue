@@ -28,14 +28,17 @@
   import DynamicInfo from './components/DynamicInfo.vue';
   import SaleRadar from './components/SaleRadar.vue';
   import { getaWs } from '/@/utils/http/long_socket/message';
+  import { useOtherStore } from '/@/store/modules/other';
+  // 获取用户IP对应地址
+  const useOther = useOtherStore();
+  useOther.HttpIpAddress();
 
   const loading = ref(true);
-
   setTimeout(() => {
     getaWs();
   }, 1000);
 
   setTimeout(() => {
     loading.value = false;
-  }, 1500);
+  }, 500);
 </script>
