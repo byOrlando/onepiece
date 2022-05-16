@@ -164,6 +164,7 @@ export default class Socket<T, RT> extends Heart {
   onmessage(callback: MessageCallback<RT>): void {
     this.ws.onmessage = (event: MessageEvent<string>) => {
       const strMessage = event.data;
+      // console.log('收到的消息::::', strMessage);
       if (strMessage === 'PONG') {
         // 心跳消息
         return;

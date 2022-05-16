@@ -14,6 +14,5 @@ export function getaWs() {
 }
 
 export function CustomMessageToMonitor(data: any) {
-  const jsonData = JSON.parse(data);
-  console.log(jsonData);
+  console.log(data);
 }
