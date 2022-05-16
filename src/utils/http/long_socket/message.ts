@@ -7,16 +7,13 @@ const globSetting = useGlobSetting();
 let websocketPro: any;
 
 export function getaWs() {
-  // const userInfo = getUserInfo();
-  if (websocketPro) {
-    return websocketPro;
+  if (!websocketPro) {
+    websocketPro = new wbSocket({ url: `${globSetting.wsUrl}?id=123` });
   }
-  websocketPro = new wbSocket({ url: `${globSetting.wsUrl}?id=123` });
   return websocketPro;
 }
 
 export function CustomMessageToMonitor(data: any) {
-  console.log(data);
-  // const jsonData = JSON.parse(data);
-  // console.log(jsonData);
+  const jsonData = JSON.parse(data);
+  console.log(jsonData);
 }
