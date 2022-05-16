@@ -33,6 +33,7 @@
 
     <!-- action  -->
     <div :class="`${prefixCls}-action`">
+      <IpAddress :class="`${prefixCls}-action__item `" />
       <AppSearch :class="`${prefixCls}-action__item `" v-if="getShowSearch" />
 
       <ErrorAction v-if="getUseErrorHandle" :class="`${prefixCls}-action__item error-action`" />
@@ -60,7 +61,7 @@
   import { propTypes } from '/@/utils/propTypes';
 
   import { Layout } from 'ant-design-vue';
-  import { AppLogo } from '/@/components/Application';
+  import { AppLogo, IpAddress } from '/@/components/Application';
   import LayoutMenu from '../menu/index.vue';
   import LayoutTrigger from '../trigger/index.vue';
 
@@ -94,6 +95,7 @@
       FullScreen,
       Notify,
       AppSearch,
+      IpAddress,
       ErrorAction,
       SettingDrawer: createAsyncComponent(() => import('/@/layouts/default/setting/index.vue'), {
         loading: true,
