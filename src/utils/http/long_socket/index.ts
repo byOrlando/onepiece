@@ -1,5 +1,5 @@
 import { useMessage } from '/@/hooks/web/useMessage';
-
+import { CustomMessageToMonitor } from './message';
 const { notification } = useMessage();
 
 export type Callback = (e: Event) => void;
@@ -59,7 +59,7 @@ export default class Socket<T, RT> extends Heart {
   options: Ioptions<RT> = {
     url: null, // 链接的通道的地址
     heartTime: 5000, // 心跳时间间隔
-    heartMsg: 'ping', // 心跳信息,默认为'ping'
+    heartMsg: 'PING', // 心跳信息,默认为'ping'
     isReconnect: true, // 是否自动重连
     isRestory: false, // 是否销毁
     reconnectTime: 5000, // 重连时间间隔
@@ -98,7 +98,7 @@ export default class Socket<T, RT> extends Heart {
     this.ws = new WebSocket(this.options.url);
     this.onopen(this.options.openCb as Callback);
     this.onclose(this.options.closeCb as Callback);
-    this.onmessage(this.options.messageCb as MessageCallback<RT>);
+    this.onmessage(CustomMessageToMonitor as MessageCallback<RT>);
   }
 
   /**
@@ -164,6 +164,10 @@ export default class Socket<T, RT> extends Heart {
   onmessage(callback: MessageCallback<RT>): void {
     this.ws.onmessage = (event: MessageEvent<string>) => {
       const strMessage = event.data;
+      if (strMessage === 'PONG') {
+        // 心跳消息
+        return;
+      }
       const { code, data, msg } = JSON.parse(strMessage);
       if (code === 200) {
         // 收到任何消息，重新开始倒计时心跳检测
@@ -171,7 +175,6 @@ export default class Socket<T, RT> extends Heart {
         super.start(() => {
           this.send(this.options.heartMsg as string);
         });
-        console.log(data, 'onmessage');
         if (typeof callback === 'function') {
           callback(data);
         } else {

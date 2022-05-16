@@ -15,6 +15,8 @@ export function getaWs() {
   return websocketPro;
 }
 
-export function CustomMessageToMonitor(data) {
-  console.log(123, data);
+export function CustomMessageToMonitor(data: any) {
+  console.log(data);
+  // const jsonData = JSON.parse(data);
+  // console.log(jsonData);
 }

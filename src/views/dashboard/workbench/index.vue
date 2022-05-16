@@ -27,10 +27,13 @@
   import QuickNav from './components/QuickNav.vue';
   import DynamicInfo from './components/DynamicInfo.vue';
   import SaleRadar from './components/SaleRadar.vue';
+  import { getaWs } from '/@/utils/http/long_socket/message';
 
   const loading = ref(true);
 
   setTimeout(() => {
+    const ws = getaWs();
+    ws.send('PING');
     loading.value = false;
   }, 1500);
 </script>
