@@ -32,8 +32,10 @@
   const loading = ref(true);
 
   setTimeout(() => {
-    const ws = getaWs();
-    ws.send('PING');
+    getaWs();
+  }, 1000);
+
+  setTimeout(() => {
     loading.value = false;
   }, 1500);
 </script>
