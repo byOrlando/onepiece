@@ -220,3 +220,5 @@ export default class Socket<T, RT> extends Heart {
     this.ws.close();
   }
 }
+
+export const wbSocket = Socket;
