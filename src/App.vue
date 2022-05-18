@@ -11,6 +11,11 @@
   import { AppProvider } from '/@/components/Application';
   import { useTitle } from '/@/hooks/web/useTitle';
   import { useLocale } from '/@/locales/useLocale';
+  import { useOtherStore } from '/@/store/modules/other';
+
+  // 获取用户IP对应地址
+  const useOther = useOtherStore();
+  useOther.HttpIpAddress();
 
   // support Multi-language
   const { getAntdLocale } = useLocale();

@@ -59,7 +59,7 @@ export default class Socket<T, RT> extends Heart {
   options: Ioptions<RT> = {
     url: null, // 链接的通道的地址
     heartTime: 5000, // 心跳时间间隔
-    heartMsg: 'PING', // 心跳信息,默认为'ping'
+    heartMsg: 'ping', // 心跳信息,默认为'ping'
     isReconnect: true, // 是否自动重连
     isRestory: false, // 是否销毁
     reconnectTime: 5000, // 重连时间间隔
@@ -165,7 +165,7 @@ export default class Socket<T, RT> extends Heart {
     this.ws.onmessage = (event: MessageEvent<string>) => {
       const strMessage = event.data;
       // console.log('收到的消息::::', strMessage);
-      if (strMessage === 'PONG') {
+      if (strMessage === 'pong') {
         // 心跳消息
         return;
       }

@@ -11,7 +11,7 @@ const account: AppRouteModule = {
   redirect: '/account/index',
   meta: {
     // hideChildrenInMenu: true,
-    icon: 'bx:cog',
+    icon: 'mdi:google-my-business',
     title: t('routes.account.account'),
     orderNo: 12,
   },
@@ -27,13 +27,23 @@ const account: AppRouteModule = {
       },
     },
     {
+      path: 'websocket',
+      name: 'WebsocketPage',
+      component: () => import('/@/views/ws/index.vue'),
+      meta: {
+        title: t('routes.account.websocket'),
+        icon: 'logos:tauri',
+        // hideMenu: true,
+      },
+    },
+    {
       path: 'doc',
       name: 'Doc',
       component: IFrame,
       meta: {
         frameSrc: 'https://vvbin.cn/doc-next/',
         title: t('routes.account.doc'),
-        icon: 'bx:dock-left',
+        icon: 'carbon:document-attachment',
       },
     },
     {
@@ -41,7 +51,7 @@ const account: AppRouteModule = {
       name: 'Company',
       component: IFrame,
       meta: {
-        frameSrc: 'https://app.shkqg.com/',
+        frameSrc: 'https://shkqg.com/',
         title: t('routes.account.company'),
         icon: 'logos:bigpanda',
       },
