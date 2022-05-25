@@ -64,6 +64,7 @@
   import { useWebSocket } from '@vueuse/core';
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { useGlobSetting } from '/@/hooks/setting';
+  import { getToken } from '/@/utils/auth';
   const globSetting = useGlobSetting();
   export default defineComponent({
     components: {
@@ -74,7 +75,7 @@
     },
     setup() {
       const state = reactive({
-        server: `${globSetting.wsUrl}?id=message`,
+        server: `${globSetting.wsUrl}?id=DouYin`,
         sendValue: '',
         recordList: [] as { id: number; time: number; res: string; dataType: string }[],
       });
@@ -85,6 +86,7 @@
           message: 'ping',
           interval: 5000,
         },
+        protocols: [getToken() || ''],
       });
 
       watchEffect(() => {

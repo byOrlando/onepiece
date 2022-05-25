@@ -51,7 +51,7 @@ const account: AppRouteModule = {
       name: 'Company',
       component: IFrame,
       meta: {
-        frameSrc: 'https://shkqg.com/',
+        frameSrc: 'https://github.com',
         title: t('routes.account.company'),
         icon: 'logos:bigpanda',
       },

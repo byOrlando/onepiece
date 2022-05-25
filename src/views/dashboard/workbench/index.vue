@@ -27,12 +27,8 @@
   import QuickNav from './components/QuickNav.vue';
   import DynamicInfo from './components/DynamicInfo.vue';
   import SaleRadar from './components/SaleRadar.vue';
-  import { getaWs } from '/@/utils/http/long_socket/message';
 
   const loading = ref(true);
-  setTimeout(() => {
-    getaWs();
-  }, 1000);
 
   setTimeout(() => {
     loading.value = false;
