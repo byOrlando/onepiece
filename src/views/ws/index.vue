@@ -61,7 +61,7 @@
   import { defineComponent, reactive, watchEffect, computed, toRefs } from 'vue';
   import { Tag, Input } from 'ant-design-vue';
   import { PageWrapper } from '/@/components/Page';
-  import { useWebSocket } from '@vueuse/core';
+  import { useWebSocket } from '/@/utils/http/wsocket';
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { useGlobSetting } from '/@/hooks/setting';
   import { getToken } from '/@/utils/auth';
@@ -86,10 +86,13 @@
           message: 'ping',
           interval: 5000,
         },
-        protocols: [getToken() || ''],
+        protocols: [(getToken() as string) || ''],
       });
 
       watchEffect(() => {
+        if (data.value === 'pong') {
+          return;
+        }
         if (data.value) {
           try {
             const res = JSON.parse(data.value);
@@ -100,9 +103,6 @@
               dataType: res.dataType,
             });
           } catch (error) {
-            if (data.value === 'pong') {
-              return;
-            }
             state.recordList.push({
               res: data.value,
               id: Math.ceil(Math.random() * 1000),
@@ -126,12 +126,9 @@
       }
 
       function toggle() {
-        if (getIsOpen.value) {
-          close();
-        } else {
-          open();
-        }
+        getIsOpen.value ? close() : open(state.server);
       }
+
       return {
         status,
         formatToDateTime,
