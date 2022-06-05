@@ -43,11 +43,16 @@
                 <span>{{ formatToDateTime(item.time) }}</span>
               </div>
               <div>
-                <div v-if="item.dataType === 'ok'">
-                  <span class="mr-2 text-ok font-medium">{{ item.res }}</span>
-                </div>
-                <div v-if="item.dataType != 'ok'">
-                  <span class="mr-2 text-error font-medium">ERROR:{{ item.res }}</span>
+                <div>
+                  <span
+                    :class="[
+                      'mr-2',
+                      item.dataType !== 'ok' ? 'text-error' : 'text-ok',
+                      'font-medium',
+                    ]"
+                  >
+                    {{ item.dataType === 'ok' ? item.res : `ERROR:${item.res}` }}
+                  </span>
                 </div>
               </div>
             </li>
